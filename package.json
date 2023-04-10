@@ -8,6 +8,7 @@
     "start": "parcel serve src/index.html",
     "watch": "parcel watch src/index.html"
   },
+  "type": "module",
   "author": "",
   "license": "ISC",
   "devDependencies": {
