@@ -559,10 +559,13 @@ function hmrAccept(bundle, id) {
 },{}],"h7u1C":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _canvasView = require("./View/CanvasView");
+var _ball = require("./sprites/Ball");
 var _paddle = require("./sprites/Paddle");
 //Images
 var _paddlePng = require("./images/paddle.png");
 var _paddlePngDefault = parcelHelpers.interopDefault(_paddlePng);
+var _ballPng = require("./images/ball.png");
+var _ballPngDefault = parcelHelpers.interopDefault(_ballPng);
 //level and colors 
 var _setup = require("./setup");
 //helpers
@@ -578,13 +581,17 @@ function setGameWin(view) {
     view.drawInfo("Winner!");
     gameOver = false;
 }
-function gameLoop(view, bricks, paddle) {
+function gameLoop(view, bricks, paddle, ball) {
+    //add images to canvas
     view.clear();
     view.drawBricks(bricks);
     view.drawSprite(paddle);
+    view.drawSprite(ball);
+    //move the ball
+    ball.moveBall();
     //check paddle is in playField
     if (paddle.isMovingLeft && paddle.pos.x > 0 || paddle.isMovingRight && paddle.pos.x < view.canvas.width - paddle.width) paddle.movePaddle();
-    requestAnimationFrame(()=>gameLoop(view, bricks, paddle));
+    requestAnimationFrame(()=>gameLoop(view, bricks, paddle, ball));
 }
 function startGame(view) {
     //reset display
@@ -593,18 +600,23 @@ function startGame(view) {
     view.drawScore(0);
     //create bricks
     const bricks = (0, _helpers.createBricks)();
+    //create ball
+    const ball = new (0, _ball.Ball)((0, _setup.BALL_SIZE), {
+        x: (0, _setup.BALL_STARTX),
+        y: (0, _setup.BALL_STARTY)
+    }, (0, _setup.BALL_SPEED), (0, _ballPngDefault.default));
     //create paddle
     const paddle = new (0, _paddle.Paddle)((0, _setup.PADDLE_SPEED), (0, _setup.PADDLE_WIDTH), (0, _setup.PADDLE_HEIGHT), {
         x: (0, _setup.PADDLE_STARTX),
         y: view.canvas.height - (0, _setup.PADDLE_HEIGHT) - 10
     }, (0, _paddlePngDefault.default));
-    gameLoop(view, bricks, paddle);
+    gameLoop(view, bricks, paddle, ball);
 }
 //creates new view
 const view = new (0, _canvasView.CanvasView)("#playField");
 view.initStartButton(startGame);
 
-},{"./View/CanvasView":"6BbeN","./helpers":"adjmJ","./sprites/Paddle":"lwmcw","./setup":"1ctuX","./images/paddle.png":"ewmIB","@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ"}],"6BbeN":[function(require,module,exports) {
+},{"./View/CanvasView":"6BbeN","./helpers":"adjmJ","./sprites/Paddle":"lwmcw","./setup":"1ctuX","./images/paddle.png":"ewmIB","@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ","./sprites/Ball":"17CCB","./images/ball.png":"cFqwC"}],"6BbeN":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "CanvasView", ()=>CanvasView);
@@ -961,6 +973,52 @@ class Paddle {
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ"}],"ewmIB":[function(require,module,exports) {
 module.exports = require("944caa818313ebfa").getBundleURL("cQozR") + "paddle.0e79ea5d.png" + "?" + Date.now();
 
-},{"944caa818313ebfa":"7G3CU"}]},["jBVbm","h7u1C"], "h7u1C", "parcelRequire00f1")
+},{"944caa818313ebfa":"7G3CU"}],"17CCB":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Ball", ()=>Ball);
+class Ball {
+    constructor(ballSize, position, speed, image){
+        this.ballSize = ballSize;
+        this.position = position;
+        this.ballImage = new Image();
+        this.ballSize = ballSize;
+        this.position = position;
+        this.speed = {
+            x: speed,
+            y: -speed
+        };
+        this.ballImage.src = image;
+    }
+    //getters for ball
+    get width() {
+        return this.ballSize;
+    }
+    get height() {
+        return this.ballSize;
+    }
+    get pos() {
+        return this.position;
+    }
+    get image() {
+        return this.ballImage;
+    }
+    //methods for ball
+    changeYDirection() {
+        this.speed.y = -this.speed.y;
+    }
+    changeXDirection() {
+        this.speed.x = -this.speed.x;
+    }
+    moveBall() {
+        this.pos.x += this.speed.x;
+        this.pos.y += this.speed.y;
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ"}],"cFqwC":[function(require,module,exports) {
+module.exports = require("9ce1b5cc1648d07").getBundleURL("cQozR") + "ball.61c120b8.png" + "?" + Date.now();
+
+},{"9ce1b5cc1648d07":"7G3CU"}]},["jBVbm","h7u1C"], "h7u1C", "parcelRequire00f1")
 
 //# sourceMappingURL=index.b3ff9ce1.js.map
