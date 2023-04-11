@@ -5,7 +5,7 @@ import { Paddle } from "./sprites/Paddle";
 import { Collision } from "./Collision";
 
 //Images
- import PADDLE_IMAGE from './images/paddle.png'
+ import PADDLE_IMAGE from './images/paddle.png';
  import BALL_IMAGE from './images/ball.png';
 
 //level and colors 

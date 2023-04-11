@@ -25,14 +25,18 @@ export class Collision {
             if(this.isCollidingBrick(ball, brick)){
 
                 ball.changeYDirection();
-    
-                if(brick.energy === 1){
-                    bricks.splice(i,1);
-                }else{
-                    brick.energy -= 1;
-                }
-                colliding = true;
+
+                
+                        if(brick.energy === 1){
+                            bricks.splice(i,1);
+                        }else{
+                            brick.energy -= 1;
+                        }
+                        colliding = true;
             }
+            
+
+            
         });
         return colliding;
     }

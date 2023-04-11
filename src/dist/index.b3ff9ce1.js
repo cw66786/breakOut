@@ -631,7 +631,7 @@ function startGame(view) {
 const view = new (0, _canvasView.CanvasView)("#playField");
 view.initStartButton(startGame);
 
-},{"./View/CanvasView":"6BbeN","./helpers":"adjmJ","./sprites/Paddle":"lwmcw","./setup":"1ctuX","./images/paddle.png":"ewmIB","@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ","./sprites/Ball":"17CCB","./images/ball.png":"cFqwC","./Collision":"fOL5u"}],"6BbeN":[function(require,module,exports) {
+},{"./View/CanvasView":"6BbeN","./helpers":"adjmJ","./sprites/Paddle":"lwmcw","./setup":"1ctuX","@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ","./sprites/Ball":"17CCB","./images/ball.png":"cFqwC","./Collision":"fOL5u","./images/paddle.png":"ewmIB"}],"6BbeN":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "CanvasView", ()=>CanvasView);
@@ -799,7 +799,7 @@ const PADDLE_WIDTH = 150;
 const PADDLE_HEIGHT = 25;
 const PADDLE_STARTX = 450;
 const PADDLE_SPEED = 10;
-const BALL_SPEED = 2;
+const BALL_SPEED = 5;
 const BALL_SIZE = 20;
 const BALL_STARTX = 500;
 const BALL_STARTY = 400;
@@ -985,10 +985,7 @@ class Paddle {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ"}],"ewmIB":[function(require,module,exports) {
-module.exports = require("944caa818313ebfa").getBundleURL("cQozR") + "paddle.0e79ea5d.png" + "?" + Date.now();
-
-},{"944caa818313ebfa":"7G3CU"}],"17CCB":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ"}],"17CCB":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Ball", ()=>Ball);
@@ -1069,6 +1066,9 @@ class Collision {
     }
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ"}]},["jBVbm","h7u1C"], "h7u1C", "parcelRequire00f1")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ"}],"ewmIB":[function(require,module,exports) {
+module.exports = require("944caa818313ebfa").getBundleURL("cQozR") + "paddle.0e79ea5d.png" + "?" + Date.now();
+
+},{"944caa818313ebfa":"7G3CU"}]},["jBVbm","h7u1C"], "h7u1C", "parcelRequire00f1")
 
 //# sourceMappingURL=index.b3ff9ce1.js.map
