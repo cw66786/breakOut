@@ -557,7 +557,14 @@ function hmrAccept(bundle, id) {
 }
 
 },{}],"h7u1C":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _canvasView = require("./View/CanvasView");
+var _paddle = require("./sprites/Paddle");
+//Images
+var _paddlePng = require("./images/paddle.png");
+var _paddlePngDefault = parcelHelpers.interopDefault(_paddlePng);
+//level and colors 
+var _setup = require("./setup");
 //helpers
 var _helpers = require("./helpers");
 // variables 
@@ -571,10 +578,13 @@ function setGameWin(view) {
     view.drawInfo("Winner!");
     gameOver = false;
 }
-function gameLoop(view, bricks) {
+function gameLoop(view, bricks, paddle) {
     view.clear();
     view.drawBricks(bricks);
-    requestAnimationFrame(()=>gameLoop(view, bricks));
+    view.drawSprite(paddle);
+    //check paddle is in playField
+    if (paddle.isMovingLeft && paddle.pos.x > 0 || paddle.isMovingRight && paddle.pos.x < view.canvas.width - paddle.width) paddle.movePaddle();
+    requestAnimationFrame(()=>gameLoop(view, bricks, paddle));
 }
 function startGame(view) {
     //reset display
@@ -583,13 +593,18 @@ function startGame(view) {
     view.drawScore(0);
     //create bricks
     const bricks = (0, _helpers.createBricks)();
-    gameLoop(view, bricks);
+    //create paddle
+    const paddle = new (0, _paddle.Paddle)((0, _setup.PADDLE_SPEED), (0, _setup.PADDLE_WIDTH), (0, _setup.PADDLE_HEIGHT), {
+        x: (0, _setup.PADDLE_STARTX),
+        y: view.canvas.height - (0, _setup.PADDLE_HEIGHT) - 10
+    }, (0, _paddlePngDefault.default));
+    gameLoop(view, bricks, paddle);
 }
 //creates new view
 const view = new (0, _canvasView.CanvasView)("#playField");
 view.initStartButton(startGame);
 
-},{"./View/CanvasView":"6BbeN","./helpers":"adjmJ"}],"6BbeN":[function(require,module,exports) {
+},{"./View/CanvasView":"6BbeN","./helpers":"adjmJ","./sprites/Paddle":"lwmcw","./setup":"1ctuX","./images/paddle.png":"ewmIB","@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ"}],"6BbeN":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "CanvasView", ()=>CanvasView);
@@ -887,6 +902,65 @@ module.exports = require("10d1283a2be3c252").getBundleURL("cQozR") + "brick-yell
 },{"10d1283a2be3c252":"7G3CU"}],"91MbM":[function(require,module,exports) {
 module.exports = require("6f141a3030ba0899").getBundleURL("cQozR") + "brick-purple.87ff48a9.png" + "?" + Date.now();
 
-},{"6f141a3030ba0899":"7G3CU"}]},["jBVbm","h7u1C"], "h7u1C", "parcelRequire00f1")
+},{"6f141a3030ba0899":"7G3CU"}],"lwmcw":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Paddle", ()=>Paddle);
+class Paddle {
+    constructor(speed, paddleWidth, paddleHieght, postition, image){
+        this.speed = speed;
+        this.paddleWidth = paddleWidth;
+        this.paddleHieght = paddleHieght;
+        this.postition = postition;
+        this.paddleImage = new Image();
+        this.handleKeyUp = (event)=>{
+            if (event.code === "ArrowLeft" || event.key === "ArrowLeft") this.moveLeft = false;
+            if (event.code === "ArrowRight" || event.key === "ArrowRight") this.moveRight = false;
+        };
+        this.handleKeyDown = (event)=>{
+            if (event.code === "ArrowLeft" || event.key === "ArrowLeft") this.moveLeft = true;
+            if (event.code === "ArrowRight" || event.key === "ArrowRight") this.moveRight = true;
+        };
+        this.speed = speed;
+        this.paddleWidth = paddleWidth;
+        this.paddleHieght = paddleHieght;
+        this.postition = postition;
+        this.moveLeft = false;
+        this.moveRight = false;
+        this.paddleImage.src = image;
+        //event listeners for movement
+        document.addEventListener("keydown", this.handleKeyDown);
+        document.addEventListener("keyup", this.handleKeyUp);
+    }
+    //getters for paddle
+    get width() {
+        return this.paddleWidth;
+    }
+    get height() {
+        return this.paddleHieght;
+    }
+    get pos() {
+        return this.postition;
+    }
+    get image() {
+        return this.paddleImage;
+    }
+    get isMovingLeft() {
+        return this.moveLeft;
+    }
+    get isMovingRight() {
+        return this.moveRight;
+    }
+    //methods for paddle
+    movePaddle() {
+        if (this.moveLeft) this.pos.x -= this.speed;
+        if (this.moveRight) this.pos.x += this.speed;
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ"}],"ewmIB":[function(require,module,exports) {
+module.exports = require("944caa818313ebfa").getBundleURL("cQozR") + "paddle.0e79ea5d.png" + "?" + Date.now();
+
+},{"944caa818313ebfa":"7G3CU"}]},["jBVbm","h7u1C"], "h7u1C", "parcelRequire00f1")
 
 //# sourceMappingURL=index.b3ff9ce1.js.map
