@@ -22,19 +22,21 @@ export class Collision {
         let colliding = false;
         
         bricks.forEach((brick, i)=>{
-            if(this.isCollidingBrick(ball, brick))
-            ball.changeYDirection();
+            if(this.isCollidingBrick(ball, brick)){
 
-            if(brick.energy === 1){
-                bricks.splice(i,1);
-            }else{
-                brick.energy -= 1;
+                ball.changeYDirection();
+    
+                if(brick.energy === 1){
+                    bricks.splice(i,1);
+                }else{
+                    brick.energy -= 1;
+                }
+                colliding = true;
             }
-            colliding = true;
         });
         return colliding;
     }
-    
+
     //other collisions
     checkBallCollision(ball: Ball, paddle: Paddle, view: CanvasView): void {
         //ball hits paddle

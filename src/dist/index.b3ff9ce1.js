@@ -1042,10 +1042,12 @@ class Collision {
     isCollidingBricks(ball, bricks) {
         let colliding = false;
         bricks.forEach((brick, i)=>{
-            if (this.isCollidingBrick(ball, brick)) ball.changeYDirection();
-            if (brick.energy === 1) bricks.splice(i, 1);
-            else brick.energy -= 1;
-            colliding = true;
+            if (this.isCollidingBrick(ball, brick)) {
+                ball.changeYDirection();
+                if (brick.energy === 1) bricks.splice(i, 1);
+                else brick.energy -= 1;
+                colliding = true;
+            }
         });
         return colliding;
     }
