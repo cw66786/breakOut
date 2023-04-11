@@ -23,6 +23,9 @@ import{
 
 } from './setup';
 
+//helpers
+import { createBricks } from "./helpers";
+
 
 // variables 
 
@@ -46,14 +49,26 @@ function setGameWin(view: CanvasView){
 function gameLoop(
     view: CanvasView,
     bricks: Brick[],
-    paddle: Paddle,
-    ball: Ball
+    // paddle: Paddle,
+    // ball: Ball
 
-){}
+){
+    view.clear();
+    view.drawBricks(bricks);
+
+    requestAnimationFrame(()=> gameLoop(view,bricks));
+}
 
 
 function startGame(view: CanvasView){
+    //reset display
+    score = 0;
+    view.drawInfo('');
+    view.drawScore(0);
 
+    //create bricks
+    const bricks = createBricks();
+    gameLoop(view, bricks)
 }
 
 
