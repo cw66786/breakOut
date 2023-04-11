@@ -4,8 +4,8 @@ import { Brick } from "./sprites/Brick";
 import { Paddle } from "./sprites/Paddle";
 
 //Images
-import PADDLE_IMAGE from './images/paddle.png';
-import BALL_IMAGE from './images/ball.png';
+// import PADDLE_IMAGE from './images/paddle.png'
+// import BALL_IMAGE from './images/ball.png';
 
 //level and colors 
 
