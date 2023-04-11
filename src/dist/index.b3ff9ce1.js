@@ -561,6 +561,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _canvasView = require("./View/CanvasView");
 var _ball = require("./sprites/Ball");
 var _paddle = require("./sprites/Paddle");
+var _collision = require("./Collision");
 //Images
 var _paddlePng = require("./images/paddle.png");
 var _paddlePngDefault = parcelHelpers.interopDefault(_paddlePng);
@@ -581,7 +582,7 @@ function setGameWin(view) {
     view.drawInfo("Winner!");
     gameOver = false;
 }
-function gameLoop(view, bricks, paddle, ball) {
+function gameLoop(view, bricks, paddle, ball, collision) {
     //add images to canvas
     view.clear();
     view.drawBricks(bricks);
@@ -591,13 +592,21 @@ function gameLoop(view, bricks, paddle, ball) {
     ball.moveBall();
     //check paddle is in playField
     if (paddle.isMovingLeft && paddle.pos.x > 0 || paddle.isMovingRight && paddle.pos.x < view.canvas.width - paddle.width) paddle.movePaddle();
-    requestAnimationFrame(()=>gameLoop(view, bricks, paddle, ball));
+    collision.checkBallCollision(ball, paddle, view);
+    const collidingBrick = collision.isCollidingBricks(ball, bricks);
+    if (collidingBrick) {
+        score += 1;
+        view.drawScore(score);
+    }
+    requestAnimationFrame(()=>gameLoop(view, bricks, paddle, ball, collision));
 }
 function startGame(view) {
     //reset display
     score = 0;
     view.drawInfo("");
     view.drawScore(0);
+    //create collisions
+    const collision = new (0, _collision.Collision)();
     //create bricks
     const bricks = (0, _helpers.createBricks)();
     //create ball
@@ -610,13 +619,13 @@ function startGame(view) {
         x: (0, _setup.PADDLE_STARTX),
         y: view.canvas.height - (0, _setup.PADDLE_HEIGHT) - 10
     }, (0, _paddlePngDefault.default));
-    gameLoop(view, bricks, paddle, ball);
+    gameLoop(view, bricks, paddle, ball, collision);
 }
 //creates new view
 const view = new (0, _canvasView.CanvasView)("#playField");
 view.initStartButton(startGame);
 
-},{"./View/CanvasView":"6BbeN","./helpers":"adjmJ","./sprites/Paddle":"lwmcw","./setup":"1ctuX","./images/paddle.png":"ewmIB","@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ","./sprites/Ball":"17CCB","./images/ball.png":"cFqwC"}],"6BbeN":[function(require,module,exports) {
+},{"./View/CanvasView":"6BbeN","./helpers":"adjmJ","./sprites/Paddle":"lwmcw","./setup":"1ctuX","./images/paddle.png":"ewmIB","@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ","./sprites/Ball":"17CCB","./images/ball.png":"cFqwC","./Collision":"fOL5u"}],"6BbeN":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "CanvasView", ()=>CanvasView);
@@ -1019,6 +1028,39 @@ class Ball {
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ"}],"cFqwC":[function(require,module,exports) {
 module.exports = require("9ce1b5cc1648d07").getBundleURL("cQozR") + "ball.61c120b8.png" + "?" + Date.now();
 
-},{"9ce1b5cc1648d07":"7G3CU"}]},["jBVbm","h7u1C"], "h7u1C", "parcelRequire00f1")
+},{"9ce1b5cc1648d07":"7G3CU"}],"fOL5u":[function(require,module,exports) {
+// for types
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Collision", ()=>Collision);
+class Collision {
+    //ball hits brick
+    isCollidingBrick(ball, brick) {
+        if (ball.pos.x < brick.pos.x + brick.width && ball.pos.x + ball.width > brick.pos.x && ball.pos.y < brick.pos.y + brick.height && ball.pos.y + ball.height > brick.pos.y) return true;
+        return false;
+    }
+    isCollidingBricks(ball, bricks) {
+        let colliding = false;
+        bricks.forEach((brick, i)=>{
+            if (this.isCollidingBrick(ball, brick)) ball.changeYDirection();
+            if (brick.energy === 1) bricks.splice(i, 1);
+            else brick.energy -= 1;
+            colliding = true;
+        });
+        return colliding;
+    }
+    //other collisions
+    checkBallCollision(ball, paddle, view) {
+        //ball hits paddle
+        if (ball.pos.x + ball.width > paddle.pos.x && ball.pos.x < paddle.pos.x + paddle.width && ball.pos.y + ball.height === paddle.pos.y) ball.changeYDirection();
+        //check ball collision with walls
+        //x check
+        if (ball.pos.x > view.canvas.width - ball.width || ball.pos.x < 0) ball.changeXDirection();
+        //y check
+        if (ball.pos.y < 0 + ball.height) ball.changeYDirection();
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"5ULAQ"}]},["jBVbm","h7u1C"], "h7u1C", "parcelRequire00f1")
 
 //# sourceMappingURL=index.b3ff9ce1.js.map
